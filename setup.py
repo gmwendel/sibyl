@@ -52,6 +52,9 @@ setup(
         "pyopengl",
         "markdown",
     ],
+    install_package_data=True,
+    package_data={"sibyl": ["assets/*"]},
+    zip_safe=False,
     ext_package="sibyl_cpp",
     ext_modules=extensions,
 )

@@ -13,8 +13,7 @@ class SibylTabAbout(SibylTab):
         self.buildWidget()
 
     def buildWidget(self):
-        filename = path.join( path.dirname( path.abspath(__file__) ),
-                '../readme.md' )
+        filename = path.join( path.dirname( path.abspath(__file__) ), "assets", "readme.md" )
         with open(filename) as rr:
             text = rr.read()
         browser = QTextBrowser()

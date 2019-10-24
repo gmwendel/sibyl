@@ -14,7 +14,7 @@ import pyqtgraph.opengl as gl
 from sibyl_cpp import *
 from PyQt5 import *
 from PyQt5.QtOpenGL import *
-from sibyl_python import *
+from sibyl import *
 
 """ -- Sibyl Event Viewer --> Central Widget
 |------------------------------------------|
