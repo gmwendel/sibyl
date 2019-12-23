@@ -38,10 +38,43 @@ double* pmt_posz;
 double* pmt_charge;
 double* pmt_time;
 
+int* pmt_type;
+
+double boundary_radius;
+double boundary_halfz;
+
 RAT::DS::Run* run;
 RAT::DS::PMTInfo* pmtinfo;
 RAT::DS::Root* ds;
+
+void calculateBoundaries()
+{
+  boundary_radius = 1.0;
+  boundary_halfz = 1.0;
+  for(int i=0; i<pmtcount; i++)
+  {
+    double x = pmt_posx[i];
+    double y = pmt_posy[i];
+    double z = pmt_posz[i];
+    double rho = sqrt(x*x + y*y);
+    int type = pmt_type[i];
+    // Type 1 is inner, type 2 is veto
+    if (type == 1)
+    {
+      if (rho > boundary_radius)
+        boundary_radius = rho;
+      if ( abs(z) > boundary_halfz )
+        boundary_halfz = abs(z);
+    }
+  }
+  // Apply a buffer
+  double buffer = 10.0;
+  boundary_radius += buffer;
+  boundary_halfz += buffer;
+}
+
 void openFile(char* p) {
+  // Default parameters
   tfile = new TFile(p);
   // PMT Info
   runT = (TTree*)tfile->Get("runT");
@@ -55,20 +88,26 @@ void openFile(char* p) {
   pmt_posz = (double*)malloc(pmtcount * sizeof(double));
   pmt_charge = (double*)malloc(pmtcount * sizeof(double));
   pmt_time = (double*)malloc(pmtcount * sizeof(double));
+  pmt_type = (int*)malloc(pmtcount * sizeof(int));
   for (int i = 0; i < pmtcount; i++) {
     TVector3 v = pmtinfo->GetPosition(i);
     pmt_posx[i] = v.X();
     pmt_posy[i] = v.Y();
     pmt_posz[i] = v.Z();
+    pmt_type[i] = pmtinfo->GetType(i);
   }
 
   T = (TTree*)tfile->Get("T");
   entries = T->GetEntries();
   printf("Entries: %i\n", entries);
   T->SetBranchAddress("ds", &ds);
+
+  calculateBoundaries();
 }
 
 int getEntries() { return entries; }
+double getBoundaryRadius() { return boundary_radius; }
+double getBoundaryHalfz() { return boundary_halfz; }
 
 RAT::DS::EV* ev;
 int nhit = 0;
