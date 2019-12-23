@@ -125,6 +125,8 @@ class SibylWatchmanFlat(gl.GLScatterPlotItem):
     realcolors = np.array([0])
     weights = np.array([0])
     phi = 0 #Angle to rotate about 0 to 2pi or something
+    boundaryRadius = 1.0
+    boundaryHalfz = 1.0
     def __init__(self):
         super(SibylWatchmanFlat,self).__init__(pxMode=False, size=300)
 
@@ -141,6 +143,10 @@ class SibylWatchmanFlat(gl.GLScatterPlotItem):
     def setWeights(self, weights):
         self.weights = weights
 
+    def setBoundaries(self, radius, halfz):
+        self.boundaryRadius = radius
+        self.boundaryHalfz = halfz
+
     def project(self):
         # Cylindrical coordinates
         posX = (self.position.T)[0]
@@ -156,9 +162,9 @@ class SibylWatchmanFlat(gl.GLScatterPlotItem):
         ## Move this to a detector class, but for now, arbitrarily define
         ## various regions.
         ## displace top and bottom
-        zCut = 6300
-        rCut = 6400
-        vetoH = 6500
+        zCut = self.boundaryHalfz-100 #6300
+        rCut = self.boundaryRadius #6400
+        vetoH = zCut + 200 #6500
         flatSelect = (posZ<zCut)&(posZ>-zCut)&(posRho<rCut)
         flatPOS = np.array([theta[flatSelect], posZ[flatSelect], np.zeros(len(theta[flatSelect]))]).T
         flatCLR = self.realcolors[flatSelect]

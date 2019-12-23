@@ -36,6 +36,14 @@ class snake:
         self._getEntries.restype = c_int
         self._getEntries.argstypes = []
 
+        self._getBoundaryRadius = self.lib.getBoundaryRadius
+        self._getBoundaryRadius.restype = c_double
+        self._getBoundaryRadius.argstypes = []
+
+        self._getBoundaryHalfz = self.lib.getBoundaryHalfz
+        self._getBoundaryHalfz.restype = c_double
+        self._getBoundaryHalfz.argstypes = []
+
         self._getEvent = self.lib.getEvent
         self._getEvent.restype = c_void_p
         self._getEvent.argstypes = [c_int]
@@ -90,6 +98,12 @@ class snake:
 
     def getEntries(self):
         return self._getEntries()
+
+    def getBoundaryRadius(self):
+        return self._getBoundaryRadius()
+
+    def getBoundaryHalfz(self):
+        return self._getBoundaryHalfz()
 
     def getXYZ(self):
         pmtc = self._getPMTCount()

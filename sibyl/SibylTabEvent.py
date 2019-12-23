@@ -53,6 +53,7 @@ class SibylTabEvent(SibylTab):
         self.plot3DView = gl.GLScatterPlotItem(pxMode=False)
         self.plotTracks = gl.GLLinePlotItem(mode='lines', color=(1,0,0,0.1))
         self.plotFlatMap = SibylWatchmanFlat()
+        self.plotFlatMap.setBoundaries( self.parameters["boundaryRadius"], self.parameters["boundaryHalfz"] )
         self.glWin = Sibyl3DViewer(self.plot3DView, self.plotTracks, self.App)
         self.flatMapWindow = Sibyl2DViewer(self.plotFlatMap, self.App)
         self.layout.addWidget(self.flatMapWindow,0,0,9,8)

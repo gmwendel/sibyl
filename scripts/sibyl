@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#/usr/bin/env python3
 import sys
 import signal
 import json
@@ -209,6 +209,8 @@ class MainWindow(QtGui.QMainWindow):
         self.cobra.openFile(self.parameters["filename"])
         self.parameters["posArray"] = np.array(self.cobra.getXYZ()).T
         self.parameters["entries"] = self.cobra.getEntries()
+        self.parameters["boundaryRadius"] = self.cobra.getBoundaryRadius();
+        self.parameters["boundaryHalfz"] = self.cobra.getBoundaryHalfz();
 
     def readRat(self):
         event = int(self.event.text())
