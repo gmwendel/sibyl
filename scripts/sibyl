@@ -1,4 +1,4 @@
-#/usr/bin/env python3
+#!/usr/bin/env python3
 import sys
 import signal
 import json
@@ -297,7 +297,7 @@ if __name__ == "__main__":
 
         def handler():
             eid = int(guit.event.text())
-            if eid > 800:
+            if eid > 8000:
                 timer.stop()
                 freq = (eid + 1) / (time.time() - start_time)
                 print(f"Frequency: {freq:.2f}")
