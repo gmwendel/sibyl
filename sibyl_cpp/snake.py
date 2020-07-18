@@ -88,7 +88,41 @@ class snake:
         self._getTrackNames = self.lib.getTrackNames
         self._getTrackNames.restype = c_int_pointer
         self._getTrackNames.argstypes = []
-
+        
+        self._getMCTruth = self.lib.getMCTruth
+        self._getMCTruth.restype = c_void_p
+        self._getMCTruth.argstypes = []
+        self._getMCX = self.lib.getMCX
+        self._getMCX.restype = c_double_pointer
+        self._getMCX.argstypes = []
+        self._getMCY = self.lib.getMCY
+        self._getMCY.restype = c_double_pointer
+        self._getMCY.argstypes = []
+        self._getMCZ = self.lib.getMCZ
+        self._getMCZ.restype = c_double_pointer
+        self._getMCZ.argstypes = []
+        self._getMCU = self.lib.getMCU
+        self._getMCU.restype = c_double_pointer
+        self._getMCU.argstypes = []
+        self._getMCV = self.lib.getMCV
+        self._getMCV.restype = c_double_pointer
+        self._getMCV.argstypes = []
+        self._getMCW = self.lib.getMCW
+        self._getMCW.restype = c_double_pointer
+        self._getMCW.argstypes = []
+        self._getMCKE = self.lib.getMCKE
+        self._getMCKE.restype = c_double_pointer
+        self._getMCKE.argstypes = []
+        self._getMCT = self.lib.getMCT
+        self._getMCT.restype = c_double_pointer
+        self._getMCT.argstypes = []
+        self._getPDG = self.lib.getPDG
+        self._getPDG.restype = c_int_pointer
+        self._getPDG.argstypes = []
+        self._getMCCount = self.lib.getMCCount
+        self._getMCCount.restype = c_int
+        self._getMCCount.argstypes = []
+        
     def openFile(self, fname):
         print(fname)
         self._openFile(fname.encode())
@@ -147,6 +181,22 @@ class snake:
         n_arr = np.fromiter(n_ret, dtype=np.int64, count=tsteps)
         return x_arr, y_arr, z_arr, n_arr
 
+    def getMCTruth(self):
+        self._getMCTruth()
+    
+    def getMCVal(self):
+        p = self._getMCCount()
+        x_arr = np.fromiter(self._getMCX(), dtype=np.float64, count=p)
+        y_arr = np.fromiter(self._getMCY(), dtype=np.float64, count=p)
+        z_arr = np.fromiter(self._getMCZ(), dtype=np.float64, count=p)
+        u_arr = np.fromiter(self._getMCU(), dtype=np.float64, count=p)
+        v_arr = np.fromiter(self._getMCV(), dtype=np.float64, count=p)
+        w_arr = np.fromiter(self._getMCW(), dtype=np.float64, count=p)
+        ke_arr = np.fromiter(self._getMCKE(), dtype=np.float64, count=p)
+        t_arr = np.fromiter(self._getMCT(), dtype=np.float64, count=p)
+        pdg_arr = np.fromiter(self._getPDG(), dtype=np.float64, count=p)
+        
+        return x_arr, y_arr, z_arr, u_arr, v_arr, w_arr, t_arr, ke_arr, pdg_arr
 
 if __name__ == "__main__":
     a = np.random.rand(10)

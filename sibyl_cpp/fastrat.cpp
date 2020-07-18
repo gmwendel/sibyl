@@ -171,6 +171,61 @@ void getTracking() {
   }
 }
 
+double* mc_x;
+double* mc_y;
+double* mc_z;
+double* mc_u;
+double* mc_v;
+double* mc_w;
+double* mc_ke;
+double* mc_t;
+int* mc_pdg;
+int mcpcount;
+
+void getMCTruth() {
+  // Get MC indicent particle information
+  RAT::DS::MC* mc = ds->GetMC();
+  mcpcount = mc->GetMCParticleCount();
+  mc_x = (double*)malloc(mcpcount * sizeof(double));
+  mc_y = (double*)malloc(mcpcount * sizeof(double));
+  mc_z = (double*)malloc(mcpcount * sizeof(double));
+  mc_u = (double*)malloc(mcpcount * sizeof(double));
+  mc_v = (double*)malloc(mcpcount * sizeof(double));
+  mc_w = (double*)malloc(mcpcount * sizeof(double));
+  mc_ke = (double*)malloc(mcpcount * sizeof(double));
+  mc_t = (double*)malloc(mcpcount * sizeof(double));
+  mc_pdg = (int*)malloc(mcpcount * sizeof(int));
+  // Check if multiple particles were tracked
+  for( int p=0; p<mcpcount; p++ ){  
+    RAT::DS::MCParticle* particle = mc->GetMCParticle(p);
+    TVector3 mcpos        = particle->GetPosition();
+    mc_x[p] = mcpos.X();
+    mc_y[p] = mcpos.Y();
+    mc_z[p] = mcpos.Z();
+    TVector3 mcmom        = particle->GetMomentum();
+    mc_u[p] = mcmom.X();
+    mc_v[p] = mcmom.Y();
+    mc_w[p] = mcmom.Z();
+    double kinetic_energy = particle->GetKE();
+    mc_ke[p] = kinetic_energy;
+    double event_time = particle->GetTime() - ev->GetDeltaT();
+    mc_t[p] = event_time;
+    int pdgcode           = particle->GetPDGCode();
+    mc_pdg[p] = pdgcode;
+  }
+}
+
+double* getMCX() { return mc_x; }
+double* getMCY() { return mc_y; }
+double* getMCZ() { return mc_z; }
+double* getMCU() { return mc_u; }
+double* getMCV() { return mc_v; }
+double* getMCW() { return mc_w; }
+double* getMCKE() { return mc_ke; }
+double* getMCT() { return mc_t; }
+int* getPDG() { return mc_pdg; }
+int getMCCount() { return mcpcount; }
+
 int getTrackCount() { return xtrack.size(); }
 double* getTrackX() { return &xtrack[0]; }
 double* getTrackY() { return &ytrack[0]; }
